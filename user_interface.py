@@ -3,42 +3,49 @@ from tutor_module import start_tutoring
 import pyglet
 from time import sleep
 import os
-
+import speech_recognition as sr
+mic_name = "Microsoft Sound Mapper - Input"
+sample_rate = 48000
+chunk_size = 2048
+device_id = 0
+r = sr.Recognizer()
+def audio_input():
+  while True:
+    with sr.Microphone(device_index = device_id, sample_rate = sample_rate,
+          chunk_size = chunk_size) as source:
+      r.adjust_for_ambient_noise(source)
+      r.pause_threshold = 1  
+      try:
+        audio = r.listen(source)
+        text = r.recognize_google(audio, language="en-GB")
+        print("you said: " + text)
+        number = int(text)
+        return number
+      except sr.UnknownValueError:
+        print("Google Speech Recognition could not understand audio. Please try again")
+      except sr.RequestError as e:
+        print("Could not request results from Google Speech Recognition service; {0} . Please try again!".format(e))
+      except:
+        print("Error listenting to the voice ! Please try again!")
+          
 def get_user_input():
   input_frac = { 'num': 0, 'den': 0 }
-  while True:
-    try:
-      print_screen(' Enter your solution ')
-      input_str = input()
-      variables = input_str.split('/')
-      input_frac['num'] = int(variables[0])
-      input_frac['den'] = int(variables[1])
-      return input_frac
-    except:
-      print_screen('Incorrect input format. Please provide num/den format input. E.g ' + stringify_frac({'num': 3, 'den': 4}))
-      continue
-
+  print_screen('Enter the numerator')
+  input_frac['num'] = audio_input()
+  print_screen('Enter the denominator')
+  input_frac['den'] = audio_input()
+  return input_frac
+      
 def user_input_gcd():
-  while True:
-    try:
-      print_screen('Enter the greatest divisor: ')
-      input_str = input()
-      input_gcd = int(input_str)
-      return input_gcd
-    except:
-      print_screen('Incorrect input format')
-      continue
+  print_screen('Enter the greatest divisor: ')
+  input_gcd = audio_input()
+  return input_gcd
     
 def user_input_lcm():
-  while True:
-    try:
-      print_screen('Enter the common multiple: ')
-      input_str = input()
-      input_cm = int(input_str)
-      return input_cm
-    except:
-      print_screen('Incorrect input format')
-      continue    
+  print_screen('Enter the common multiple: ')
+  input_cm = audio_input()
+  return input_cm
+  
 
 def print_screen(string):
   # TODO: text to voice
@@ -57,5 +64,9 @@ def start():
   start_tutoring()
 
 if __name__ == '__main__':
+  mic_list = sr.Microphone.list_microphone_names()
+  for i, microphone_name in enumerate(mic_list):
+    if microphone_name == mic_name:
+      device_id = i
   start()
 # print_screen("hello")
