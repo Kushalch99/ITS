@@ -12,7 +12,7 @@ def solve_cm(num1, num2):
     print_screen(' Use this multiple to solve the problem ')
     return
   else:
-    print('Incorrect! Try Again!')
+    print_screen('Incorrect! Try Again!')
     solve_cm(num1, num2)
 
 def solve_gcd(num1, num2):
@@ -25,21 +25,25 @@ def solve_gcd(num1, num2):
     print_screen(' Use this gcd to reduce the fraction ')
     return
   else:
-    print('Incorrect! Try Again!')
-    solve_gcd()
+    print_screen('Incorrect! Try Again!')
+    solve_gcd(num1, num2)
 
 
 def start_tutoring(): 
   from user_interface import print_screen
   last_state = None if len(state_stack) == 0 else state_stack[-1]
   frac1, frac2, next_level = generate_ques(last_state)
+  if next_level == -1:
+    print_screen('Congratulations! You have completed the Assignment.')
+    return
   print_screen('Solve : ' + stringify_frac(frac1) + " + " + stringify_frac(frac2))
   solution_frac = solution(frac1, frac2)
   was_solved = solve(frac1, frac2, solution_frac)
   exit_tutoring = update_state(next_level, was_solved, last_state)
   if exit_tutoring == 1:
-    print_screen('Learn addition first')
-  return
+    print_screen('Read the lesson and try again!')
+    return
+  return start_tutoring()
 
 def solve(frac1, frac2, solution_frac):
   from user_interface import get_user_input, print_screen
