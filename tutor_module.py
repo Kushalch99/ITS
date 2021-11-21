@@ -33,7 +33,7 @@ def start_tutoring():
   from user_interface import print_screen
   last_state = None if len(state_stack) == 0 else state_stack[-1]
   frac1, frac2, next_level = generate_ques(last_state)
-  if next_level == -1:
+  if next_level == -1:  
     print_screen('Congratulations! You have completed the Assignment.')
     return
   print_screen('Solve : ' + stringify_frac(frac1) + " + " + stringify_frac(frac2))

@@ -4,7 +4,6 @@ import pyglet
 from time import sleep
 import os
 import speech_recognition as sr
-mic_name = "Microsoft Sound Mapper - Input"
 sample_rate = 48000
 chunk_size = 2048
 device_id = 0
@@ -64,9 +63,5 @@ def start():
   start_tutoring()
 
 if __name__ == '__main__':
-  mic_list = sr.Microphone.list_microphone_names()
-  for i, microphone_name in enumerate(mic_list):
-    if microphone_name == mic_name:
-      device_id = i
   start()
 # print_screen("hello")
